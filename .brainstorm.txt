@@ -1,0 +1,16 @@
+Goals:
+-- pure HTML, CSS, Vanilla js front end
+  -- login / logout
+  -- homepage
+    --> startquiz -> get random cards ()
+    --> get all card (ordered)
+    -- remove card
+    --> add card
+  -- cache login
+
+-- python (Flask) API layer calling rust Logic (pyo3)
+-- rust logic and DB layer (sqlx)
+-- DB (postgres)
+
+-- Hosting:
+      aws elasticbeanstalk (with public domain)

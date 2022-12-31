@@ -1,0 +1,19 @@
+# etc
+**/brainstorm.txt
+
+# ignore ALL .log files
+*.log
+
+# env
+**/conda_env/
+**/env/
+**/*.env
+**/*.ini
+
+# ignore ALL folder in ANY directory named temp
+**/temp/
+
+# ignore anything related to test
+test*
+**/coverage
+**/tests
