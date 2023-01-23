@@ -8,10 +8,14 @@
 **/conda_env/
 **/env/
 **/*.env
+**/quizzik-env
 **/*.ini
 
 # ignore ALL folder in ANY directory named temp
 **/temp/
+
+# binaries
+**/target/
 
 # ignore anything related to test
 test*

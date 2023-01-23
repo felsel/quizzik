@@ -1,0 +1,48 @@
+[project]
+name = "quizzik"
+dependencies = [
+  "Flask==1.1.0",
+  "Flask-WTF~=1.0.0",
+  "WTForms~=2.3.0",
+  "email-validator~=1.0.0",
+  "Flask-SQLAlchemy~=2.0.0",
+  "Flask-Bcrypt~=1.0.0",
+  "Flask-Login==0.6.0",
+  "Pillow~=9.0.0",
+  "werkzeug~=2.0.0",
+  "flask-mail~=0.9.0"
+]
+repository = "https://github.com/ijl/orjson"
+requires-python = ">=3.7"
+description = "A website for practicing spaced repetition and quizzing yourself."
+authors = [
+  { name = "Joelly Malet Ekofo", email = "joelly.ea.malet100@gmail.com" },
+]
+maintainers = [
+  { name = "Joelly Malet Ekofo", email = "joelly.ea.malet100@gmail.com" },
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python",
+    "Programming Language :: Rust",
+    "Typing :: Typed",
+]
+
+[build-system]
+build-backend = "maturin"
+requires = ["maturin>=0.13,<0.15"]
+
+[tool.maturin]
+python-source = "pysrc"
+sdist-include = ["Cargo.lock", "include/**/*"]

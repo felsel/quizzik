@@ -14,3 +14,8 @@ Goals:
 
 -- Hosting:
       aws elasticbeanstalk (with public domain)
+
+###################################################
+## REST design::q
+
+###################################################
