@@ -1,0 +1,19 @@
+{
+  "name": "quizzik",
+  "version": "1.0.0",
+  "description": "website for practicing spaced repetition and quizzing yourself.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felsel/quizzik.git"
+  },
+  "author": "Joelly",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/felsel/quizzik/issues"
+  },
+  "homepage": "https://github.com/felsel/quizzik#readme"
+}
