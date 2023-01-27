@@ -1,12 +1,19 @@
 use pyo3::prelude::*;
+use pyo3::types::PyList;
+use r2d2_postgres::postgres::GenericClient;
 use std::collections::HashMap;
 use std::fs::{self, File};
 use std::io::{Error, Read};
 
 use serde::Deserialize;
-use sqlx::postgres::{PgPoolOptions, PgRow};
-use sqlx::Pool;
 use toml::from_str;
+
+use r2d2;
+use r2d2_postgres::{
+    postgres::{error::Error as PgError, NoTls},
+    PostgresConnectionManager,
+};
+use std::thread;
 
 #[derive(Debug, Deserialize)]
 struct Config {
@@ -17,16 +24,13 @@ struct Config {
 struct Database {
     DB_USER: String,
     DB_PASS: String,
-    DB_URL: String,
+    DB_HOST: String,
+    DB_PORT: String,
+    DB_NAME: String,
 }
 
 #[pyfunction]
-fn connect_to_db() -> PyResult<String> {
-    // let mut buf: Vec<u8> = vec![];
-    // let mut file = File::open("Config.toml")?;
-    // file.read_to_end(&mut buf).expect("failed to read file");
-    // let config = String::from_utf8(buf).expect("failed to convert config bytes to string");
-
+fn connect_to_db() -> Py<PyAny> {
     let config =
         fs::read_to_string("Config.toml").expect("failed to convert config bytes to string");
     let config: Config = toml::from_str(&config).unwrap_or_else(|e| {
@@ -38,13 +42,49 @@ fn connect_to_db() -> PyResult<String> {
             database: Database {
                 DB_USER: "".into(),
                 DB_PASS: "".into(),
-                DB_URL: "".into(),
+                DB_HOST: "".into(),
+                DB_PORT: "".into(),
+                DB_NAME: "".into(),
             },
         }
     });
     println!("{:?}", config);
-    Ok(config.database.DB_USER)
-    // let pool = PgPoolOptions::max_connections(10).connect(self, format!(BD_URL, DB_USER, DB_PASS));
+    let manager = PostgresConnectionManager::new(
+        format!(
+            "host={} user={} password={} port={} dbname={}",
+            config.database.DB_HOST,
+            config.database.DB_USER,
+            config.database.DB_PASS,
+            config.database.DB_PORT,
+            config.database.DB_NAME
+        )
+        .parse()
+        .unwrap(),
+        NoTls,
+    );
+    let pool = r2d2::Pool::new(manager).unwrap();
+    let mut titles = Vec::<String>::new();
+    let handle = thread::spawn(move || -> Result<_, PgError> {
+        let mut client = pool.get().unwrap();
+        let rows = client.query(
+            "select title from film where film.film_id between $1 and $2",
+            &[&10_i32, &50_i32],
+        )?;
+
+        for row in rows {
+            let title: String = row.get("title");
+            let _ = &mut titles.push(title);
+        }
+        Ok(titles)
+    })
+    .join()
+    .unwrap();
+    // .expect("Failed to rejoin execution thread");
+    let mut hm = HashMap::new();
+    for (i, e) in handle.into_iter().enumerate() {
+        hm.insert(i, e);
+    }
+    Python::with_gil(|py: Python| hm.to_object(py))
 }
 
 /// Formats the sum of two numbers as string.

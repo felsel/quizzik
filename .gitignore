@@ -10,6 +10,7 @@
 **/*.env
 **/quizzik-env
 **/*.ini
+**/Config.toml
 
 # ignore ALL folder in ANY directory named temp
 **/temp/
